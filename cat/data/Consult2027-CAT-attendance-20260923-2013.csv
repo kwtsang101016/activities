@@ -1,0 +1,17 @@
+recorded_at,course,section,person_id,name,english_name,role,present,zone,row_label,seat_index,seat_number
+2026-09-23T12:13:59.798Z,Consult2027,CAT,instructor-tsang,曾家炜,Ka Wai Tsang,aa,yes,advisor,Instructor,6,7
+2026-09-23T12:13:59.798Z,Consult2027,CAT,stu-225040456,Ke Zhao,,student,no,,,,
+2026-09-23T12:13:59.798Z,Consult2027,CAT,stu-226040326,王锦仪,,student,no,,,,
+2026-09-23T12:13:59.798Z,Consult2027,CAT,stu-226040289,侯宇彤,,student,no,,,,
+2026-09-23T12:13:59.798Z,Consult2027,CAT,stu-226040307,张嘉宁,,student,yes,student,Row 1,11,12
+2026-09-23T12:13:59.798Z,Consult2027,CAT,stu-226040268,徐小祺,,student,no,,,,
+2026-09-23T12:13:59.798Z,Consult2027,CAT,stu-124090317,李天拓,,student,no,,,,
+2026-09-23T12:13:59.798Z,Consult2027,CAT,stu-2205040472,张天健,,student,no,,,,
+2026-09-23T12:13:59.798Z,Consult2027,CAT,stu-226040317,李瀚宇,,student,no,,,,
+2026-09-23T12:13:59.798Z,Consult2027,CAT,stu-226085066,罗静娴,,student,no,,,,
+2026-09-23T12:13:59.798Z,Consult2027,CAT,stu-125090345,李心可,,student,no,,,,
+2026-09-23T12:13:59.798Z,Consult2027,CAT,stu-123090807,张家辉,,student,no,,,,
+2026-09-23T12:13:59.798Z,Consult2027,CAT,stu-122090584,Xianzhi Wu,,student,no,,,,
+2026-09-23T12:13:59.798Z,Consult2027,CAT,guest-3b11ed8b-b1ac-4727-b5df-0e60f55895a4,赵帝茹,Ruby,guest,yes,student,Row 4,10,11
+2026-09-23T12:13:59.798Z,Consult2027,CAT,guest-a4d68253-80c4-4862-b00d-fcff3e2c5f92,俞凯馨,Astoria,guest,yes,student,Row 1,1,2
+2026-09-23T12:13:59.798Z,Consult2027,CAT,guest-a37ddd17-69d8-40ad-891e-7e45354ea546,杨馥瑾,,guest,yes,student,Row 3,9,10

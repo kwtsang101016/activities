@@ -14,7 +14,12 @@ export interface CourseEvent {
 }
 
 export const COURSE_EVENTS: CourseEvent[] = [
-  { date: "2026-09-23", title: "Info session + Vibe coding workshop", kind: "info" },
+  {
+    date: "2026-09-23",
+    title: "Info session + Vibe coding workshop",
+    kind: "info",
+    attendanceFile: "2026-09-23.json",
+  },
   { date: "2026-10-14", title: "Vibe coding workshop", kind: "workshop" },
   { date: "2026-11-04", title: "Vibe coding workshop", kind: "workshop" },
   { date: "2026-11-18", title: "Vibe coding workshop", kind: "workshop" },

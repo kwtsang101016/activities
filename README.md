@@ -21,3 +21,11 @@ Regenerate CAT roster from the interest survey:
 ```bash
 python scripts/build_consult_roster.py
 ```
+
+Import a saved CAT attendance CSV into the calendar:
+
+```bash
+python scripts/import_attendance_csv.py cat/data/Consult2027-CAT-attendance-YYYYMMDD-HHMM.csv --date YYYY-MM-DD --label "CAT · Session title"
+# then set attendanceFile on that date in calendar/src/data/schedule.ts and:
+cd calendar && npm run build
+```
