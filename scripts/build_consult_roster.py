@@ -40,6 +40,7 @@ def norm_major(raw: str) -> str:
         "ds": "Data Science",
         "datascience": "Data Science",
         "统计学": "Statistics",
+        "统计": "Statistics",
         "statistics": "Statistics",
         "cse": "Computer Science and Engineering",
         "人工智能": "Artificial Intelligence",

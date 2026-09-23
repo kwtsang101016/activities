@@ -133,6 +133,36 @@
       "major": "Data Science",
       "year": "PhD",
       "plan": "Data Science · PhD"
+    },
+    {
+      "id": "stu-125020351",
+      "name": "杨馥瑾",
+      "englishName": "",
+      "role": "student",
+      "college": "School of Data Science",
+      "major": "Statistics",
+      "year": "Year 2",
+      "plan": "Statistics · Year 2"
+    },
+    {
+      "id": "stu-123090766",
+      "name": "俞凯馨",
+      "englishName": "",
+      "role": "student",
+      "college": "School of Data Science",
+      "major": "Statistics",
+      "year": "Year 4",
+      "plan": "Statistics · Year 4"
+    },
+    {
+      "id": "stu-226040328",
+      "name": "赵帝茹",
+      "englishName": "",
+      "role": "student",
+      "college": "School of Data Science",
+      "major": "Statistics",
+      "year": "Master's",
+      "plan": "Statistics · Master's"
     }
   ]
 }
