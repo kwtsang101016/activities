@@ -112,6 +112,24 @@ h2 {
 .links a, .textlink { color: #9a3412; }
 .muted { color: var(--muted); }
 
+.wechat {
+  margin-top: 24px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+.wechat h2 { margin-bottom: 8px; }
+.wechat .muted { max-width: 36em; margin: 0 auto 16px; }
+.wechat-qr {
+  display: block;
+  width: min(280px, 70vw);
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+}
+
 .benefits {
   margin: 0;
   padding-left: 1.2rem;
