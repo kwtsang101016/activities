@@ -123,6 +123,16 @@
       "major": "Data Science",
       "year": "Year 4",
       "plan": "Data Science · Year 4"
+    },
+    {
+      "id": "stu-122090584",
+      "name": "Xianzhi Wu",
+      "englishName": "",
+      "role": "student",
+      "college": "School of Data Science",
+      "major": "Data Science",
+      "year": "PhD",
+      "plan": "Data Science · PhD"
     }
   ]
 }
