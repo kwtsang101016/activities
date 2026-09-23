@@ -1,0 +1,128 @@
+{
+  "course": "Consult2027",
+  "section": "CAT",
+  "classroom": "Consultation room",
+  "people": [
+    {
+      "id": "instructor-tsang",
+      "name": "曾家炜",
+      "englishName": "Ka Wai Tsang",
+      "role": "aa",
+      "college": "School of Data Science",
+      "major": "—",
+      "year": "Instructor",
+      "plan": "",
+      "photo": ""
+    },
+    {
+      "id": "stu-225040456",
+      "name": "Ke Zhao",
+      "englishName": "",
+      "role": "student",
+      "college": "School of Data Science",
+      "major": "Data Science",
+      "year": "PhD",
+      "plan": "Data Science · PhD"
+    },
+    {
+      "id": "stu-226040326",
+      "name": "王锦仪",
+      "englishName": "",
+      "role": "student",
+      "college": "School of Data Science",
+      "major": "Statistics",
+      "year": "Master's",
+      "plan": "Statistics · Master's"
+    },
+    {
+      "id": "stu-226040289",
+      "name": "侯宇彤",
+      "englishName": "",
+      "role": "student",
+      "college": "School of Data Science",
+      "major": "Statistics",
+      "year": "Master's",
+      "plan": "Statistics · Master's"
+    },
+    {
+      "id": "stu-226040307",
+      "name": "张嘉宁",
+      "englishName": "",
+      "role": "student",
+      "college": "School of Data Science",
+      "major": "Statistics",
+      "year": "Master's",
+      "plan": "Statistics · Master's"
+    },
+    {
+      "id": "stu-226040268",
+      "name": "徐小祺",
+      "englishName": "",
+      "role": "student",
+      "college": "School of Data Science",
+      "major": "Statistics",
+      "year": "Master's",
+      "plan": "Statistics · Master's"
+    },
+    {
+      "id": "stu-124090317",
+      "name": "李天拓",
+      "englishName": "",
+      "role": "student",
+      "college": "School of Data Science",
+      "major": "Computer Science and Engineering",
+      "year": "Year 3",
+      "plan": "Computer Science and Engineering · Year 3"
+    },
+    {
+      "id": "stu-2205040472",
+      "name": "张天健",
+      "englishName": "",
+      "role": "student",
+      "college": "School of Data Science",
+      "major": "Data Science",
+      "year": "PhD",
+      "plan": "Data Science · PhD"
+    },
+    {
+      "id": "stu-226040317",
+      "name": "李瀚宇",
+      "englishName": "",
+      "role": "student",
+      "college": "School of Data Science",
+      "major": "Statistics",
+      "year": "Master's",
+      "plan": "Statistics · Master's"
+    },
+    {
+      "id": "stu-226085066",
+      "name": "罗静娴",
+      "englishName": "",
+      "role": "student",
+      "college": "School of Artificial Intelligence",
+      "major": "Artificial Intelligence",
+      "year": "Master's",
+      "plan": "Artificial Intelligence · Master's"
+    },
+    {
+      "id": "stu-125090345",
+      "name": "李心可",
+      "englishName": "",
+      "role": "student",
+      "college": "School of Artificial Intelligence",
+      "major": "Artificial Intelligence",
+      "year": "Year 2",
+      "plan": "Artificial Intelligence · Year 2"
+    },
+    {
+      "id": "stu-123090807",
+      "name": "张家辉",
+      "englishName": "",
+      "role": "student",
+      "college": "School of Data Science",
+      "major": "Data Science",
+      "year": "Year 4",
+      "plan": "Data Science · Year 4"
+    }
+  ]
+}
