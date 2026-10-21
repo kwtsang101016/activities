@@ -20,7 +20,7 @@ export const COURSE_EVENTS: CourseEvent[] = [
     kind: "info",
     attendanceFile: "2026-09-23.json",
   },
-  { date: "2026-10-14", title: "Vibe coding workshop", kind: "workshop" },
+  { date: "2026-10-22", title: "Vibe coding workshop", kind: "workshop" },
   { date: "2026-11-04", title: "Vibe coding workshop", kind: "workshop" },
   { date: "2026-11-18", title: "Vibe coding workshop", kind: "workshop" },
   { date: "2027-02-19", title: "Consultation", kind: "consultation" },
