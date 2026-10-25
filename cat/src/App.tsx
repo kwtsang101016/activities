@@ -375,6 +375,18 @@ export default function App() {
             <button type="button" className="primary-button" onClick={() => sync.join()}>
               Join classroom
             </button>
+            <button
+              type="button"
+              className="ghost-button"
+              onClick={() => {
+                sync.join();
+                sync.holdConnectionForAuth();
+                setAuthError(null);
+                window.setTimeout(() => setPending({ type: "becomeInstructor" }), 0);
+              }}
+            >
+              Instructor: Join with PIN
+            </button>
           </div>
         </section>
       ) : null}
@@ -411,6 +423,7 @@ export default function App() {
               type="button"
               className="ghost-button"
               onClick={() => {
+                sync.holdConnectionForAuth();
                 setAuthError(null);
                 window.setTimeout(() => setPending({ type: "becomeInstructor" }), 0);
               }}
