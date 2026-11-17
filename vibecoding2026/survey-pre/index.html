@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vibe Coding · Pre-survey (Task 1)</title>
+  <style>
+    :root {
+      --ink: #1e1b4b;
+      --paper: #faf5ff;
+      --accent: #4f46e5;
+      --line: #c4b5fd;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top right, #ddd6fe 0%, transparent 40%),
+        var(--paper);
+      padding: 32px 16px 64px;
+    }
+    main {
+      max-width: 640px;
+      margin: 0 auto;
+      background: #fff;
+      border: 3px solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      padding: 28px 24px;
+    }
+    h1 { margin: 0 0 8px; font-size: 1.6rem; }
+    .lead { color: #4b5563; line-height: 1.5; }
+    fieldset {
+      border: 2px solid var(--line);
+      margin: 18px 0 0;
+      padding: 14px 14px 8px;
+    }
+    legend { font-weight: 800; padding: 0 6px; }
+    label.option {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin: 8px 0;
+      cursor: pointer;
+    }
+    .row {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      min-height: 42px;
+      padding: 8px 10px;
+      border: 2px solid var(--ink);
+      font: inherit;
+    }
+    button {
+      min-height: 46px;
+      margin-top: 16px;
+      padding: 0 16px;
+      border: 3px solid var(--ink);
+      background: var(--accent);
+      color: #fff;
+      font: 800 14px/1 ui-monospace, Menlo, monospace;
+      box-shadow: 4px 4px 0 var(--ink);
+      cursor: pointer;
+    }
+    button:disabled { opacity: 0.5; cursor: wait; }
+    .msg { margin-top: 12px; font-weight: 700; }
+    .msg.ok { color: #059669; }
+    .msg.err { color: #be123c; }
+    .hint { margin-top: 10px; font-size: 0.92rem; color: #6b7280; }
+    a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Task 1 · Pre-survey</h1>
+    <p class="lead">
+      Answer three quick questions, then submit to CAT with the <strong>same name and PIN</strong>
+      as your workshop name card.
+    </p>
+    <p class="hint">
+      Slides: <a href="../">Vibe Coding Workshop 2026</a>
+      · Create your card first in CAT if you have not yet.
+    </p>
+
+    <form id="surveyForm">
+      <fieldset>
+        <legend>1. Do you know what IDE / Work mode is?</legend>
+        <label class="option"><input type="radio" name="knowIdeWorkMode" value="Y" required> Yes</label>
+        <label class="option"><input type="radio" name="knowIdeWorkMode" value="N"> No</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>2. How often do you use AI?</legend>
+        <label class="option"><input type="radio" name="aiFrequency" value="Often" required> Often</label>
+        <label class="option"><input type="radio" name="aiFrequency" value="Sometimes"> Sometimes</label>
+        <label class="option"><input type="radio" name="aiFrequency" value="Seldom"> Seldom</label>
+        <label class="option"><input type="radio" name="aiFrequency" value="Never"> Never</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>3. How often do you use AI IDE / Work mode?</legend>
+        <label class="option"><input type="radio" name="aiIdeFrequency" value="Often" required> Often</label>
+        <label class="option"><input type="radio" name="aiIdeFrequency" value="Sometimes"> Sometimes</label>
+        <label class="option"><input type="radio" name="aiIdeFrequency" value="Seldom"> Seldom</label>
+        <label class="option"><input type="radio" name="aiIdeFrequency" value="Never"> Never</label>
+      </fieldset>
+
+      <div class="row">
+        <label>
+          CAT display name
+          <input id="catName" type="text" maxlength="40" required autocomplete="off">
+        </label>
+        <label>
+          CAT PIN
+          <input id="catPin" type="password" minlength="4" maxlength="32" required autocomplete="current-password">
+        </label>
+      </div>
+
+      <button id="submitBtn" type="submit">Submit to CAT</button>
+      <p id="msg" class="msg" hidden></p>
+    </form>
+  </main>
+
+  <script>
+    (function () {
+      var DEFAULT_CAT = "https://vibecoding-cat.onrender.com";
+      var params = new URLSearchParams(window.location.search);
+      var catBase = (params.get("cat") || DEFAULT_CAT).replace(/\/$/, "");
+
+      var form = document.getElementById("surveyForm");
+      var msg = document.getElementById("msg");
+      var submitBtn = document.getElementById("submitBtn");
+
+      function show(text, ok) {
+        msg.hidden = false;
+        msg.textContent = text;
+        msg.className = "msg " + (ok ? "ok" : "err");
+      }
+
+      form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        var data = new FormData(form);
+        var answers = {
+          knowIdeWorkMode: data.get("knowIdeWorkMode"),
+          aiFrequency: data.get("aiFrequency"),
+          aiIdeFrequency: data.get("aiIdeFrequency"),
+        };
+        var name = document.getElementById("catName").value;
+        var pin = document.getElementById("catPin").value;
+        submitBtn.disabled = true;
+        show("Submitting…", true);
+        try {
+          var response = await fetch(catBase + "/api/workshop/survey", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name: name, pin: pin, answers: answers }),
+          });
+          var payload = await response.json();
+          if (!response.ok || !payload.ok) {
+            throw new Error(payload.message || "Submit failed.");
+          }
+          show("Task 1 marked on your CAT name card. You can return to the slides.", true);
+        } catch (error) {
+          show(
+            (error && error.message ? error.message : "Submit failed.") +
+              " If CAT is asleep on Render, wait ~30s and try again.",
+            false,
+          );
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
