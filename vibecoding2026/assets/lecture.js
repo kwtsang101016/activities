@@ -2,6 +2,9 @@
   "use strict";
 
   var TEXT_SCALE_KEY = "vibe-workshop-text-scale";
+  var SESSION_KEY = "vibe-workshop-session-id";
+  var LOG_URL =
+    "https://script.google.com/macros/s/AKfycbw0Pp_vfh7AMpHjEXKh8FAzzXx-ALxrA4AyXcZvlFU2X5RDKrQhG0anh72p9YFC_v50sw/exec";
   var TEXT_SCALES = [
     { zoom: 1, label: "Aa", title: "Text size: default" },
     { zoom: 1.25, label: "Aa+", title: "Text size: large (lecture hall)" },
@@ -16,6 +19,41 @@
     return 0;
   }
 
+  function sessionId() {
+    try {
+      var existing = sessionStorage.getItem(SESSION_KEY);
+      if (existing) return existing;
+      var id =
+        window.crypto && typeof crypto.randomUUID === "function"
+          ? crypto.randomUUID()
+          : "s-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
+      sessionStorage.setItem(SESSION_KEY, id);
+      return id;
+    } catch (e) {
+      return "s-" + Date.now().toString(36);
+    }
+  }
+
+  /** Anonymous visit / slide log → Google Sheet. Fail silently. */
+  function logVisit(pageLabel) {
+    try {
+      var payload = {
+        timestamp: new Date().toISOString(),
+        sessionId: sessionId(),
+        page: String(pageLabel || document.title).slice(0, 120),
+        project: "vibecoding2026-slides",
+        userAgent: String(navigator.userAgent || "").slice(0, 180),
+      };
+      fetch(LOG_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload),
+        mode: "cors",
+        keepalive: true,
+      }).catch(function () { /* ignore */ });
+    } catch (e) { /* ignore */ }
+  }
+
   var scenes = Array.prototype.slice.call(document.querySelectorAll(".scene"));
   if (!scenes.length) return;
 
@@ -28,6 +66,7 @@
   var nextBtn = document.getElementById("nextBtn");
   var scaleBtn = document.getElementById("scaleBtn");
   var stage = document.getElementById("stage");
+  var lastLoggedPage = "";
 
   function applyZoom() {
     var scale = TEXT_SCALES[scaleIndex];
@@ -37,6 +76,16 @@
       scaleBtn.title = scale.title;
       scaleBtn.classList.toggle("toolBtnActive", scaleIndex > 0);
     }
+  }
+
+  function sceneLabel(i) {
+    var scene = scenes[i];
+    var title = scene && scene.getAttribute("data-title");
+    return (
+      String(i + 1).padStart(2, "0") +
+      " · " +
+      (title || "Slide " + (i + 1))
+    );
   }
 
   function go(to) {
@@ -55,6 +104,11 @@
     if (prevBtn) prevBtn.disabled = index === 0;
     if (nextBtn) nextBtn.disabled = index === scenes.length - 1;
     window.scrollTo({ top: 0, behavior: "smooth" });
+    var page = sceneLabel(index);
+    if (page !== lastLoggedPage) {
+      lastLoggedPage = page;
+      logVisit(page);
+    }
   }
 
   if (jump) {

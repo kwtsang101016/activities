@@ -525,8 +525,9 @@ Please:
           <li>Paste a <code>doPost</code> script that appends JSON fields to a <code>usage_log</code> tab</li>
           <li>Deploy → Web app → Who has access: Anyone</li>
           <li>Copy the web app URL into your front-end as the log endpoint</li>
-          <li>On page load, <code>fetch(url, { method: "POST", body: JSON.stringify(event) })</code></li>
+          <li>On page / slide change, <code>fetch(url, { method: "POST", body: JSON.stringify(event) })</code></li>
         </ol>
+        <div class="callout">These workshop slides already log anonymous slide visits to the instructor’s Google Sheet — open the Sheet while you advance slides to see rows appear.</div>
         <div class="tip"><h3>Ask your IDE</h3>
           <pre class="prompt-box">Add anonymous visit logging to this static HTML app.
 Post only timestamp, random sessionId, and page title to a Google Apps Script URL placeholder.

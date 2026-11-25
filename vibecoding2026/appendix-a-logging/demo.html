@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Appendix A · Visit log demo</title>
+  <style>
+    :root { --ink: #111827; --paper: #f8fafc; --accent: #0f766e; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, #ccfbf1 0%, transparent 42%),
+        var(--paper);
+      padding: 32px 16px 64px;
+    }
+    main {
+      max-width: 640px;
+      margin: 0 auto;
+      background: #fff;
+      border: 3px solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      padding: 28px 24px;
+    }
+    h1 { margin: 0 0 8px; font-size: 1.55rem; }
+    .lead { color: #4b5563; line-height: 1.5; }
+    code, pre {
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 0.88rem;
+    }
+    pre {
+      white-space: pre-wrap;
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 12px;
+      border: 2px solid var(--ink);
+      overflow: auto;
+    }
+    .row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    button {
+      min-height: 44px;
+      padding: 0 14px;
+      border: 3px solid var(--ink);
+      background: var(--accent);
+      color: #fff;
+      font: 800 13px/1 ui-monospace, Menlo, monospace;
+      box-shadow: 4px 4px 0 var(--ink);
+      cursor: pointer;
+    }
+    button.secondary { background: #fff; color: var(--ink); }
+    .msg { margin-top: 14px; font-weight: 700; min-height: 1.4em; }
+    .ok { color: #047857; }
+    .err { color: #be123c; }
+    .hint { margin-top: 10px; color: #6b7280; font-size: 0.92rem; }
+    label { display: grid; gap: 6px; margin-top: 14px; font-weight: 700; }
+    input {
+      min-height: 42px;
+      padding: 8px 10px;
+      border: 2px solid var(--ink);
+      font: inherit;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Anonymous visit log demo</h1>
+    <p class="lead">
+      Posts only <strong>timestamp</strong>, a random <strong>sessionId</strong>, and a
+      <strong>page</strong> label to your Google Apps Script web app. No names, SIDs, or emails.
+    </p>
+
+    <label>
+      Apps Script web app URL
+      <input id="logUrl" type="url" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off">
+    </label>
+
+    <div class="row">
+      <button id="logBtn" type="button">Send test visit</button>
+      <button id="copySnippet" class="secondary" type="button">Copy front-end snippet</button>
+    </div>
+    <p id="msg" class="msg"></p>
+    <p class="hint">
+      Tip: use <code>Content-Type: text/plain</code> so the browser skips a CORS preflight that Apps Script often rejects.
+    </p>
+    <pre id="snippet"></pre>
+  </main>
+
+  <script>
+    (function () {
+      var STORAGE_URL = "vibecoding-appendix-a-log-url";
+      var SESSION_KEY = "vibecoding-appendix-a-session";
+      var urlInput = document.getElementById("logUrl");
+      var msg = document.getElementById("msg");
+      var snippetEl = document.getElementById("snippet");
+
+      var DEFAULT_LOG_URL =
+        "https://script.google.com/macros/s/AKfycbw0Pp_vfh7AMpHjEXKh8FAzzXx-ALxrA4AyXcZvlFU2X5RDKrQhG0anh72p9YFC_v50sw/exec";
+      try {
+        urlInput.value = localStorage.getItem(STORAGE_URL) || DEFAULT_LOG_URL;
+      } catch (e) {
+        urlInput.value = DEFAULT_LOG_URL;
+      }
+
+      function sessionId() {
+        try {
+          var existing = sessionStorage.getItem(SESSION_KEY);
+          if (existing) return existing;
+          var id =
+            (window.crypto && crypto.randomUUID)
+              ? crypto.randomUUID()
+              : "s-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
+          sessionStorage.setItem(SESSION_KEY, id);
+          return id;
+        } catch (e) {
+          return "s-" + Date.now().toString(36);
+        }
+      }
+
+      function buildPayload() {
+        return {
+          timestamp: new Date().toISOString(),
+          sessionId: sessionId(),
+          page: document.title,
+          project: "vibe-coding-demo",
+          userAgent: navigator.userAgent.slice(0, 180),
+        };
+      }
+
+      function snippetText(url) {
+        return [
+          "const LOG_URL = " + JSON.stringify(url || "PASTE_WEB_APP_URL_HERE") + ";",
+          "const event = {",
+          "  timestamp: new Date().toISOString(),",
+          "  sessionId: crypto.randomUUID(),",
+          "  page: document.title,",
+          "  project: \"my-static-app\",",
+          "};",
+          "fetch(LOG_URL, {",
+          "  method: \"POST\",",
+          "  headers: { \"Content-Type\": \"text/plain;charset=utf-8\" },",
+          "  body: JSON.stringify(event),",
+          "}).catch(() => {}); // fail silently",
+        ].join("\n");
+      }
+
+      function refreshSnippet() {
+        snippetEl.textContent = snippetText(urlInput.value.trim());
+      }
+      refreshSnippet();
+      urlInput.addEventListener("input", refreshSnippet);
+
+      document.getElementById("copySnippet").addEventListener("click", async function () {
+        refreshSnippet();
+        try {
+          await navigator.clipboard.writeText(snippetEl.textContent);
+          msg.className = "msg ok";
+          msg.textContent = "Snippet copied.";
+        } catch (e) {
+          msg.className = "msg err";
+          msg.textContent = "Could not copy — select the snippet manually.";
+        }
+      });
+
+      document.getElementById("logBtn").addEventListener("click", async function () {
+        var url = urlInput.value.trim();
+        if (!url) {
+          msg.className = "msg err";
+          msg.textContent = "Paste your Apps Script web app URL first.";
+          return;
+        }
+        try {
+          localStorage.setItem(STORAGE_URL, url);
+        } catch (e) {}
+
+        msg.className = "msg";
+        msg.textContent = "Sending…";
+        try {
+          var response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(buildPayload()),
+          });
+          var text = await response.text();
+          var ok = response.ok;
+          try {
+            var parsed = JSON.parse(text);
+            ok = Boolean(parsed.ok);
+          } catch (e) {}
+          msg.className = "msg " + (ok ? "ok" : "err");
+          msg.textContent = ok
+            ? "Logged. Open your Google Sheet → usage_log tab."
+            : "Request reached the endpoint but logging failed. Check the script deploy settings.";
+        } catch (error) {
+          msg.className = "msg err";
+          msg.textContent =
+            "Network/CORS error. Redeploy as Web app with access Anyone, and use the /exec URL.";
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
