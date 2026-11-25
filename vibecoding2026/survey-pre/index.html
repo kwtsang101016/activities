@@ -81,11 +81,11 @@
     <h1>Task 1 · Pre-survey</h1>
     <p class="lead">
       Answer three quick questions, then submit to CAT with the <strong>same name and PIN</strong>
-      as your workshop name card.
+      as your workshop name card. Opening Pre-survey from CAT can fill those fields automatically.
     </p>
     <p class="hint">
       Slides: <a href="../">Vibe Coding Workshop 2026</a>
-      · Create your card first in CAT if you have not yet.
+      · Create your card first in CAT if you have not yet. Name + PIN are remembered in this browser after you enter them once.
     </p>
 
     <form id="surveyForm">
@@ -130,18 +130,72 @@
   <script>
     (function () {
       var DEFAULT_CAT = "https://vibecoding-cat.onrender.com";
+      var CREDS_KEY = "vibecoding-cat-workshop-creds-v1";
       var params = new URLSearchParams(window.location.search);
       var catBase = (params.get("cat") || DEFAULT_CAT).replace(/\/$/, "");
 
       var form = document.getElementById("surveyForm");
       var msg = document.getElementById("msg");
       var submitBtn = document.getElementById("submitBtn");
+      var nameInput = document.getElementById("catName");
+      var pinInput = document.getElementById("catPin");
 
       function show(text, ok) {
         msg.hidden = false;
         msg.textContent = text;
         msg.className = "msg " + (ok ? "ok" : "err");
       }
+
+      function loadCreds() {
+        try {
+          var raw = localStorage.getItem(CREDS_KEY);
+          if (!raw) return null;
+          var parsed = JSON.parse(raw);
+          var name = typeof parsed.name === "string" ? parsed.name.trim() : "";
+          var pin = typeof parsed.pin === "string" ? parsed.pin : "";
+          if (!name || pin.length < 4) return null;
+          return { name: name.slice(0, 40), pin: pin.slice(0, 32) };
+        } catch (error) {
+          return null;
+        }
+      }
+
+      function saveCreds(name, pin) {
+        try {
+          localStorage.setItem(
+            CREDS_KEY,
+            JSON.stringify({ name: String(name).trim().slice(0, 40), pin: String(pin).slice(0, 32) }),
+          );
+        } catch (error) {
+          // ignore storage failures
+        }
+      }
+
+      function applyCreds(creds) {
+        if (!creds) return;
+        if (!nameInput.value) nameInput.value = creds.name;
+        if (!pinInput.value) pinInput.value = creds.pin;
+      }
+
+      applyCreds(loadCreds());
+
+      window.addEventListener("message", function (event) {
+        var allowed =
+          event.origin === "https://vibecoding-cat.onrender.com" ||
+          event.origin === "http://localhost:5173" ||
+          event.origin === "http://127.0.0.1:5173";
+        if (!allowed) return;
+        var data = event.data;
+        if (!data || data.type !== "vibecoding-cat-creds") return;
+        if (typeof data.name !== "string" || typeof data.pin !== "string") return;
+        var creds = {
+          name: data.name.trim().slice(0, 40),
+          pin: String(data.pin).slice(0, 32),
+        };
+        if (!creds.name || creds.pin.length < 4) return;
+        saveCreds(creds.name, creds.pin);
+        applyCreds(creds);
+      });
 
       form.addEventListener("submit", async function (event) {
         event.preventDefault();
@@ -151,8 +205,9 @@
           aiFrequency: data.get("aiFrequency"),
           aiIdeFrequency: data.get("aiIdeFrequency"),
         };
-        var name = document.getElementById("catName").value;
-        var pin = document.getElementById("catPin").value;
+        var name = nameInput.value;
+        var pin = pinInput.value;
+        saveCreds(name, pin);
         submitBtn.disabled = true;
         show("Submitting…", true);
         try {
